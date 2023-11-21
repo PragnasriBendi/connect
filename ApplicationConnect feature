@@ -1,0 +1,13 @@
+Feature: Application connect
+  I want to do multiple validations on connect feature
+
+  Scenario: Login as Admin
+    Given user launch the vriti login page
+    When user enter the credentials and click on login button
+    Then user should able to land on find candidate page
+    When user click on View profile button
+
+  Scenario: Send request for connection
+    Given I am on other users profile
+    When I click on the connect button
+    Then Connect button should convert into Request sent
