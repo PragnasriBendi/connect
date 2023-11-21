@@ -1,0 +1,98 @@
+package stepDefinitions;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class MainSteps {
+	WebDriver driver;
+
+	@Given("user launch the vriti login page")
+	public void user_launch_the_vriti_login_page() {
+		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://sit.rec.vriti.ai/login");
+	}
+
+	@When("user enter the credentials  and click on login button")
+	public void user_enter_the_credentials_and_click_on_login_button() {
+		driver.findElement(By.id("email")).sendKeys("vritisep.22.30@gmail.com");
+		driver.findElement(By.name("password")).sendKeys("Pragna@123");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+	}
+
+	@Then("user should able to land on find candidate page")
+	public void user_should_able_to_land_on_find_candidate_page() throws InterruptedException {
+		Thread.sleep(3000);
+		WebElement findCand = driver.findElement(By.xpath("//a[text()='Find Candidate']"));	
+		Thread.sleep(5000);
+	}
+
+	@When("user click on View profile button")
+	public void user_click_on_view_profile_button() throws InterruptedException {
+		driver.findElement(By.xpath("//div[text()='Leela']/../../../..//button[text()='View Profile']"))
+		.click();
+		Thread.sleep(3000);
+
+	}
+
+	@Given("I am on other users profile")
+	public void i_am_on_other_users_profile() throws InterruptedException {
+		Thread.sleep(3000);
+
+		Set<String> windowHandle = driver.getWindowHandles();
+		
+		Iterator<String> i1 = windowHandle.iterator();
+		String parentWindow = i1.next();
+		String childWindow = i1.next();
+
+		driver.switchTo().window(childWindow);
+
+		WebElement banner = driver.findElement(By.xpath("//div[@class='css-wsep2y']"));
+		boolean isDisplayed = banner.isDisplayed();
+		if (isDisplayed) {
+			System.out.println("Banner is visible on the webpage");
+		} else {
+			System.out.println("Banner is not visible on the webpage");
+		}
+
+	}
+
+	@When("I click on the connect button")
+	public void i_click_on_the_connect_button() {
+		driver.findElement(By.xpath("//div[@class='css-0']/button[1]")).click();
+
+	}
+
+	@Then("Connect button should convert into Request sent")
+	public void connect_button_should_convert_into_request_sent() {
+		WebElement reqSent = driver.findElement(By.xpath("//button[text()='Request sent']"));
+		System.out.println(reqSent.getText());
+	}
+
+	/*
+	 * @Then("Follow button should be updated to �Following�") public void
+	 * follow_button_should_be_updated_to_following() { WebElement following =
+	 * driver.findElement(By.xpath("(//button[text()='Following'])[2]"));
+	 * System.out.println(following.getText()); }
+	 */
+
+	/*
+	 * @Then("user should be added in my Following list") public void
+	 * user_should_be_added_in_my_following_list() {
+	 * 
+	 * 
+	 * }
+	 */
+
+}
